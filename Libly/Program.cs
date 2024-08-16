@@ -1,7 +1,21 @@
 var builder = WebApplication.CreateBuilder(args);
-//Stuff to do before you build the app, like requesting services you need
+//adds Razor Pages services to the DI container.
+builder.Services.AddRazorPages();
+
+//Before this, request all services required by the app
 var app = builder.Build();
-//Stuff to do after you build the app, like configure routes
-app.MapGet("/", () => "Welcome to Libly!");
-//finally run the app
+
+//app.MapGet("/", () => "Welcome to Libly!");
+/*
+ * UseRouting means that we won't be hardcoding every route, rather
+ * the framework should figure it out dynamically based on conventions
+ */
+app.UseRouting();
+/*
+ *  MapRazorPages() tells the app to look for Razor Pages in the Pages folder 
+ *  and handle requests accordingly. Other option is MVC style controllers
+ */
+app.UseEndpoints(endpoints => endpoints.MapRazorPages());
+
+//Before this, select which of the services to be used in the app
 app.Run();
