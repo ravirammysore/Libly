@@ -3,10 +3,9 @@
 
 <h1>Book List</h1>
 
-<table border="1">
+<table class="table table-bordered">
     <thead>
-        <tr>
-            <th>ID</th>
+        <tr>            
             <th>Title</th>
             <th>Category</th>
             <th>Date of Publication</th>
@@ -14,16 +13,15 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var book in Model.books)
+        @foreach (var book in Model.Books)
         {
-            <tr>
-                <td>@book.GetId()</td>
-                <td>@book.GetTitle()</td>
-                <td>@book.GetCategory()</td>
-                <td>@book.GetDop().ToShortDateString()</td>
+            <tr>                
+                <td>@book.Title</td>
+                <td>@book.Category</td>
+                <td>@book.Dop.ToShortDateString()</td>
                 <td>
-                    <a href="/Books/Edit?id=@book.GetId()">Edit</a> |
-                    <a href="/Books/Delete?id=@book.GetId()">Delete</a>
+                    <a href="/Books/Edit?id=@book.Id">Edit</a> |
+                    <a href="/Books/Delete?id=@book.Id">Delete</a>
                 </td>
             </tr>
         }
