@@ -3,14 +3,29 @@
 
 <h1>Book List</h1>
 
-<ul>
-    @*@foreach (var name in Model.bookNames)
-    {
-        <li>@name</li>
-    }*@
-
-    @for(int i=0; i < Model.bookNames.Length; i++)
-    {
-        <p>@(i+1) : @Model.bookNames[i] </p>
-    }
-</ul>
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Date of Publication</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var book in Model.books)
+        {
+            <tr>
+                <td>@book.GetId()</td>
+                <td>@book.GetTitle()</td>
+                <td>@book.GetCategory()</td>
+                <td>@book.GetDop().ToShortDateString()</td>
+                <td>
+                    <a href="/Books/Edit?id=@book.GetId()">Edit</a> |
+                    <a href="/Books/Delete?id=@book.GetId()">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
