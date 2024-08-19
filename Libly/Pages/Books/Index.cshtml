@@ -20,13 +20,13 @@
                 <td>@book.Category</td>
                 <td> @Html.DisplayFor(modelItem => book.Dop)</td>
                 <td>
-                    <a href="/Books/Edit?id=@book.Id">Edit</a> |
-                    <a href="/Books/Delete?id=@book.Id">Delete</a>
+                    <a asp-page="Edit" asp-route-id="@book.Id">Edit</a>
+                    <a asp-page="Delete" asp-route-id="@book.Id">Delete</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
-<div>
-    <a href="/Books/Create">Add New</a>
+<div>    
+    <a asp-page="Create">Add New</a>
 </div>
