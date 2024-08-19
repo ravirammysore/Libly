@@ -1,10 +1,13 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Libly.Models
 {
     public class Book : BaseModel
     {
         public string Title { get; set; }
+        
+        [DataType(DataType.Date)]
         public DateTime Dop { get; set; }
 
         // Navigation property to Category
