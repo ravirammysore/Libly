@@ -1,35 +1,28 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace Libly.Models
 {
-    public class Book
+    public class Book : BaseModel
     {
-        public int Id { get; set; }
-        public string Title { get; set; }        
-        
-        [DataType(DataType.Date)]
+        public string Title { get; set; }
         public DateTime Dop { get; set; }
-        public DateTime CreatedOn { get; private set; }
-        public DateTime? ModifiedOn { get; set; }
 
-        //Navigation property to Category
+        // Navigation property to Category
         public int CategoryId { get; set; }
         public Category Category { get; set; }
 
         // Parameterless constructor
-        public Book()
+        public Book() : base()
         {
-            CreatedOn = DateTime.Now;
         }
 
         // Parameterized constructor
-        public Book(int id, string title, string category, DateTime dop) : this()
+        public Book(int id, string title, DateTime dop, int categoryId) : this()
         {
             Id = id;
-            Title = title;            
+            Title = title;
             Dop = dop;
+            CategoryId = categoryId;
         }
     }
-
 }
