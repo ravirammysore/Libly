@@ -18,7 +18,7 @@
             <tr>                
                 <td>@book.Title</td>
                 <td>@book.Category</td>
-                <td>@book.Dop</td>
+                <td> @Html.DisplayFor(modelItem => book.Dop)</td>
                 <td>
                     <a href="/Books/Edit?id=@book.Id">Edit</a> |
                     <a href="/Books/Delete?id=@book.Id">Delete</a>

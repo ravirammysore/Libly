@@ -8,6 +8,8 @@ namespace Libly.Models
         public int Id { get; set; }
         public string Title { get; set; }
         public string Category { get; set; }
+        
+        [DataType(DataType.Date)]
         public DateTime Dop { get; set; }
         public DateTime CreatedOn { get; private set; }
         public DateTime? ModifiedOn { get; set; }
