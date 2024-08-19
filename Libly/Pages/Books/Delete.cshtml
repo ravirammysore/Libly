@@ -1,0 +1,18 @@
+﻿@page
+@model Libly.Pages.Books.DeleteModel
+
+<h1>Delete Book</h1>
+
+<p>Are you sure you want to delete this book?</p>
+
+<div>
+    <h3>@Model.Book.Title</h3>
+    <p><strong>Date of Publication:</strong> @Model.Book.Dop</p>
+    <p><strong>Category:</strong> @Model.Book.Category</p>
+</div>
+
+<form method="post">
+    <!-- Hidden field for the Book ID -->
+    <input type="hidden" asp-for="Book.Id" />
+    <button type="submit">Delete</button>    
+</form>
