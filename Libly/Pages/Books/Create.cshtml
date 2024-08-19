@@ -1,0 +1,28 @@
+﻿@page
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@model Libly.Pages.Books.CreateModel
+
+<h1>Create New Book</h1>
+
+<form method="post">
+    <div>
+        <label asp-for="Book.Title"></label>
+        <input asp-for="Book.Title" class="form-control" />
+    </div>
+
+    <div>
+        <label asp-for="Book.Dop"></label>
+        <input asp-for="Book.Dop" class="form-control" type="date" />
+    </div>
+
+    <div>
+        <label asp-for="Book.Category"></label>
+        <input asp-for="Book.Category" class="form-control" />
+    </div>
+
+    <div>
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
+
