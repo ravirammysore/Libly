@@ -41,7 +41,12 @@ namespace Libly.Pages.Books
                 CategoryId = BookVM.CategoryId            
             };
 
-            BooksData.Create(book);
+            //BooksData.Create(book);
+            using(BooksContext context = new BooksContext())
+            {
+                context.Books.Add(book);
+                context.SaveChanges();
+            }
 
             return RedirectToPage("./Index");
         }
