@@ -17,21 +17,25 @@ namespace Libly.Pages.Books
         public IActionResult OnGet(int id)
         {
             // Load the book from the in-memory collection
-            var book = BooksData.GetById(id);
-
-            if (book == null)
+            using (var context = new BooksContext())
             {
-                return NotFound();
+                //var book = BooksData.GetById(id);
+                var book = context.Books.Find(id);
+
+                if (book == null)
+                {
+                    return NotFound();
+                }
+
+                // Populate the view model
+                BookVM = new BookViewModel
+                {
+                    Id = book.Id,
+                    Title = book.Title,
+                    Dop = book.Dop,
+                    CategoryId = book.CategoryId
+                }; 
             }
-
-            // Populate the view model
-            BookVM = new BookViewModel
-            {
-                Id = book.Id,
-                Title = book.Title,
-                Dop = book.Dop,
-                CategoryId = book.CategoryId
-            };
 
             // Populate the category options
             CategoryOptions = new List<SelectListItem>
@@ -55,24 +59,29 @@ namespace Libly.Pages.Books
                 };
                 return Page();
             }
-
-            // Load the book from the in-memory collection
-            var bookToUpdate = BooksData.GetById(BookVM.Id);
-            if (bookToUpdate == null)
-            {
-                return NotFound();
-            }
-
-            // Update the book with the new values
-            bookToUpdate.Title = BookVM.Title;
-            bookToUpdate.Dop = BookVM.Dop;
-            bookToUpdate.CategoryId = BookVM.CategoryId;
             
-            bookToUpdate.ModifiedOn = DateTime.Now;
+            //var bookToUpdate = BooksData.GetById(BookVM.Id);            
+            using (BooksContext context = new BooksContext())
+            {
+                var bookToUpdate = context.Books.Find(BookVM.Id);
 
-            BooksData.Update(bookToUpdate);
+                if (bookToUpdate == null)
+                {
+                    return NotFound();
+                }
 
-            return RedirectToPage("./Index");
+                // Update the book with the new values
+                bookToUpdate.Title = BookVM.Title;
+                bookToUpdate.Dop = BookVM.Dop;
+                bookToUpdate.CategoryId = BookVM.CategoryId;
+
+                bookToUpdate.ModifiedOn = DateTime.Now;
+
+                //BooksData.Update(bookToUpdate);
+                context.SaveChanges();
+
+                return RedirectToPage("./Index");
+            }
         }
     }
 }
