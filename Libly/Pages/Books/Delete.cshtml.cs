@@ -9,19 +9,20 @@ namespace Libly.Pages.Books
 {
     public class DeleteModel : PageModel
     {
+        private readonly BooksContext _context;
+        public DeleteModel(BooksContext context)
+        {
+            _context = context; 
+        }
         [BindProperty]
         public Book? Book { get; set; }
 
         public IActionResult OnGet(int id)
         {
             // Retrieve the book to be deleted
-            //Book = BooksData.GetById(id);
-            using (var context = new BooksContext())
-            {
-                Book = context.Books
+            Book = _context.Books
                             .Include(b => b.Category)
                             .SingleOrDefault(b => b.Id == id);
-            }
 
             if (Book == null)
             {
@@ -34,16 +35,9 @@ namespace Libly.Pages.Books
         public IActionResult OnPost()
         {
             // Delete the book from the static collection
-            //BooksData.Delete(Book.Id);
+            _context.Books.Remove(Book);
+            _context.SaveChanges();
 
-            if(Book != null)
-            {
-                using (var context = new BooksContext())
-                {
-                    context.Books.Remove(Book);
-                    context.SaveChanges();
-                }
-            }           
             // Redirect back to the Index page after deletion
             return RedirectToPage("./Index");
         }

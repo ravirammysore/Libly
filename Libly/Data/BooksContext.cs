@@ -9,16 +9,10 @@ namespace Libly.Data
 {
     public class BooksContext : DbContext
     {
-        private const string ConnectionString = "Server=(localdb)\\mssqllocaldb;Database=LibraryDB;Trusted_Connection=True;MultipleActiveResultSets=true";
-       
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public BooksContext(DbContextOptions<BooksContext> options) : base(options)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer(ConnectionString);
-            }
-        }
 
+        }
         // Declare the DbSet properties for Books and Categories
         public DbSet<Book> Books { get; set; }
         public DbSet<Category> Categories { get; set; }

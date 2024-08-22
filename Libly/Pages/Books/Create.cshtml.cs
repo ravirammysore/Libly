@@ -11,6 +11,12 @@ namespace Libly.Pages.Books
 {
     public class CreateModel : PageModel
     {
+        private readonly BooksContext _context;
+        public CreateModel(BooksContext context)
+        {
+            _context = context;   
+        }
+
         [BindProperty]
         public BookViewModel BookVM { get; set; }
 
@@ -38,34 +44,28 @@ namespace Libly.Pages.Books
                 Dop = BookVM.Dop,
                 CategoryId = BookVM.CategoryId            
             };
-            
-            using(BooksContext context = new BooksContext())
-            {
-                context.Books.Add(book);
-                context.SaveChanges();
-            }
+
+            _context.Books.Add(book);
+            _context.SaveChanges();
 
             return RedirectToPage("./Index");
         }
 
         private void PopulateDropdown()
-        {          
+        {
             //In edit page a better approach is shown
-            using (var context = new BooksContext())
-            {
-                var selectListItems = new List<SelectListItem>();
+            var selectListItems = new List<SelectListItem>();
 
-                foreach (var item in context.Categories)
+            foreach (var item in _context.Categories)
+            {
+                var selectListItem = new SelectListItem()
                 {
-                    var selectListItem = new SelectListItem()
-                    {
-                        Value = item.Id.ToString(),
-                        Text = item.Name
-                    };
-                    selectListItems.Add(selectListItem);
-                }
-                CategoryOptions = selectListItems;
+                    Value = item.Id.ToString(),
+                    Text = item.Name
+                };
+                selectListItems.Add(selectListItem);
             }
+            CategoryOptions = selectListItems;
         }
     }
 }
