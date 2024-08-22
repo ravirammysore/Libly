@@ -15,11 +15,9 @@ namespace Libly.Pages.Books
         public List<SelectListItem> CategoryOptions { get; set; }
 
         public IActionResult OnGet(int id)
-        {
-            // Load the book from the in-memory collection
+        {            
             using (var context = new BooksContext())
-            {
-                //var book = BooksData.GetById(id);
+            {                
                 var book = context.Books.Find(id);
 
                 if (book == null)
@@ -37,12 +35,7 @@ namespace Libly.Pages.Books
                 }; 
             }
 
-            // Populate the category options
-            CategoryOptions = new List<SelectListItem>
-            {
-                new SelectListItem { Value = "1", Text = "Fiction" },
-                new SelectListItem { Value = "2", Text = "Science Fiction" }
-            };
+            PopulateDropdown();
 
             return Page();
         }
@@ -52,15 +45,10 @@ namespace Libly.Pages.Books
             if (!ModelState.IsValid)
             {
                 // Reload the category options if validation fails
-                CategoryOptions = new List<SelectListItem>
-                {
-                    new SelectListItem { Value = "1", Text = "Fiction" },
-                    new SelectListItem { Value = "2", Text = "Science Fiction" }
-                };
+                PopulateDropdown();
                 return Page();
             }
-            
-            //var bookToUpdate = BooksData.GetById(BookVM.Id);            
+                        
             using (BooksContext context = new BooksContext())
             {
                 var bookToUpdate = context.Books.Find(BookVM.Id);
@@ -74,13 +62,25 @@ namespace Libly.Pages.Books
                 bookToUpdate.Title = BookVM.Title;
                 bookToUpdate.Dop = BookVM.Dop;
                 bookToUpdate.CategoryId = BookVM.CategoryId;
-
                 bookToUpdate.ModifiedOn = DateTime.Now;
-
-                //BooksData.Update(bookToUpdate);
+                
                 context.SaveChanges();
 
                 return RedirectToPage("./Index");
+            }
+        }
+        private void PopulateDropdown()
+        {
+            //This is more readable than the approach in the create page
+            using (var context = new BooksContext())
+            {                
+                var items = context.Categories
+                                    .Select(c => new SelectListItem
+                                    {
+                                        Value = c.Id.ToString(),
+                                        Text = c.Name
+                                    });
+                CategoryOptions = items.ToList();
             }
         }
     }

@@ -5,6 +5,7 @@ using Libly.Data;
 using Libly.Models;
 using System.Collections.Generic;
 using Libly.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace Libly.Pages.Books
 {
@@ -17,19 +18,16 @@ namespace Libly.Pages.Books
 
         public void OnGet()
         {
-            //later we will remove this hardcoding
-            CategoryOptions = new List<SelectListItem>
-            {
-                new SelectListItem { Value = "1", Text = "Fiction" },
-                new SelectListItem { Value = "2", Text = "Science Fiction" }
-            };
-        }
+            // Fetch categories from the database
+            PopulateDropdown();
+        }        
 
         public IActionResult OnPost()
         {
             if (!ModelState.IsValid)
             {
-                OnGet(); // Reload dropdown options
+                /* Calling OnGet() will also work in the case, but this is a generic approach */
+                PopulateDropdown();
                 return Page();
             }
 
@@ -40,8 +38,7 @@ namespace Libly.Pages.Books
                 Dop = BookVM.Dop,
                 CategoryId = BookVM.CategoryId            
             };
-
-            //BooksData.Create(book);
+            
             using(BooksContext context = new BooksContext())
             {
                 context.Books.Add(book);
@@ -49,6 +46,26 @@ namespace Libly.Pages.Books
             }
 
             return RedirectToPage("./Index");
+        }
+
+        private void PopulateDropdown()
+        {          
+            //In edit page a better approach is shown
+            using (var context = new BooksContext())
+            {
+                var selectListItems = new List<SelectListItem>();
+
+                foreach (var item in context.Categories)
+                {
+                    var selectListItem = new SelectListItem()
+                    {
+                        Value = item.Id.ToString(),
+                        Text = item.Name
+                    };
+                    selectListItems.Add(selectListItem);
+                }
+                CategoryOptions = selectListItems;
+            }
         }
     }
 }
