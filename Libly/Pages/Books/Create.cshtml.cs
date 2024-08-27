@@ -46,9 +46,23 @@ namespace Libly.Pages.Books
             };
 
             _context.Books.Add(book);
-            _context.SaveChanges();
 
-            return RedirectToPage("./Index");
+            try
+            {
+                _context.SaveChanges();
+                return RedirectToPage("./Index");
+            }
+            catch (Exception)
+            {
+                //we can also log this error using some technique for dev team to analyze
+                ModelState.AddModelError(string.Empty, "An error occurred while saving the book. Please try again.");
+
+                // Idealy we would repopulate the dropdown to ensure the form is fully populated again
+                //PopulateDropdown();
+
+                // Return the page with the error message
+                return Page();
+            }
         }
 
         private void PopulateDropdown()
