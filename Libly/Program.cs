@@ -12,7 +12,15 @@ builder.Services.AddDbContext<BooksContext>(options =>
 //Before this, request all services required by the app
 var app = builder.Build();
 
-//app.MapGet("/", () => "Welcome to Libly!");
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    // Redirect to a custom error page    
+    app.UseExceptionHandler("/Error"); 
+}
 /*
  * UseRouting means that we won't be hardcoding every route, rather
  * the framework should figure it out dynamically based on conventions
