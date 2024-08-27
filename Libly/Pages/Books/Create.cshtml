@@ -24,6 +24,10 @@
     </div>
 </form>
 
+@* We will not get full control on date validation error message, 
+we can look at that later with client-side validation *@
+<div asp-validation-summary="All" class="text-danger"></div>
+
 <div>
     <a asp-page="./Index" class="btn btn-secondary">Back to List</a>
 </div>

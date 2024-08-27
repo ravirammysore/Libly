@@ -22,6 +22,10 @@
         <select asp-for="BookVM.CategoryId" asp-items="Model.CategoryOptions"></select>
     </div>
 
+    @* We will not get full control on date validation error message,
+    we can look at that later with client-side validation *@
+    
+    <div asp-validation-summary="All" class="text-danger"></div>
 
     <div>
         <input type="submit" value="Update" class="btn btn-primary" />
