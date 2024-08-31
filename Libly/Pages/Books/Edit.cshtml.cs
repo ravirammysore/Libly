@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Libly.Data;
-using Libly.Models;
-using Libly.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Libly.Core.Data;
+using Libly.Core.ViewModels;
 
 namespace Libly.Pages.Books
 {

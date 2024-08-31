@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Libly.Models;
 using System.Collections.Generic;
 using System.Reflection.Emit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using Libly.Core.Models;
 
-namespace Libly.Data
+namespace Libly.Core.Data
 {
     public class BooksContext : DbContext
     {

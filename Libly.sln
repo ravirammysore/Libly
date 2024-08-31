@@ -5,6 +5,8 @@ VisualStudioVersion = 17.8.34322.80
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Libly", "Libly\Libly.csproj", "{722685E3-4F6E-4684-8DA1-831412A91694}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Libly.Core", "Libly.Core\Libly.Core.csproj", "{907F4F50-E2A5-450B-B89D-37318802A2D9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{722685E3-4F6E-4684-8DA1-831412A91694}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{722685E3-4F6E-4684-8DA1-831412A91694}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{722685E3-4F6E-4684-8DA1-831412A91694}.Release|Any CPU.Build.0 = Release|Any CPU
+		{907F4F50-E2A5-450B-B89D-37318802A2D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{907F4F50-E2A5-450B-B89D-37318802A2D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{907F4F50-E2A5-450B-B89D-37318802A2D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{907F4F50-E2A5-450B-B89D-37318802A2D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

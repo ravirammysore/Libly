@@ -1,5 +1,5 @@
-using Libly.Data;
-using Libly.Models;
+using Libly.Core.Data;
+using Libly.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;

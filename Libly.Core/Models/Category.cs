@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Libly.Models
+namespace Libly.Core.Models
 {
     public class Category : BaseModel
     {

@@ -1,4 +1,4 @@
-using Libly.Data;
+using Libly.Core.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
