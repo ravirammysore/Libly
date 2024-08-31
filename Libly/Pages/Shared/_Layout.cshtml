@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Libly system</title>
+    
+    <!-- Bootstrap CSS from CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        html {
+            position: relative;
+            min-height: 100%;
+        }
+        body {
+            margin-bottom: 40px; /* Margin bottom by footer height */
+        }
+        .footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 30px; /* Set the fixed height of the footer here */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Libly</a>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/Books">Books</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Help">Help</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+      <main role="main" class="pb-3">
+            @RenderBody()
+    </main>       
+    </div>
+
+    <footer class="footer bg-dark">
+        <div class="container">
+            <span class="text-light">&copy; @DateTime.Now.Year - Libly</span>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS bundle from CDN (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Optional: Add your custom scripts here -->
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
