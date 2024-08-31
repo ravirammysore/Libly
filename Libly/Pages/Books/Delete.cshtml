@@ -1,18 +1,25 @@
 ﻿@page
 @model Libly.Pages.Books.DeleteModel
 
-<h1>Delete Book</h1>
+<h2 class="my-2">Delete Book</h2>
 
-<p>Are you sure you want to delete this book?</p>
-
-<div>
-    <h3>@Model.Book.Title</h3>
-    <p><strong>Date of Publication:</strong> @Html.DisplayFor(m => m.Book.Dop)</p>
-    <p><strong>Category:</strong> @Model.Book.Category.Name</p>
+<div class="row">
+    <div class="col-md-4">
+        <h4>Are you sure you want to delete this book?</h4>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h5 class="card-title">@Model.Book.Title</h5>
+                <p class="card-text">
+                    <strong>Date of Publication:</strong> @Model.Book.Dop.ToShortDateString()<br />
+                    <strong>Category:</strong> @Model.Book.Category.Name
+                </p>
+            </div>
+        </div>
+        
+        <form method="post" class="mt-3">
+            <input type="hidden" asp-for="Book.Id" />
+            <button type="submit" class="btn btn-danger">Delete</button>
+            <a asp-page="./Index" class="btn btn-secondary ml-2">Cancel</a>
+        </form>
+    </div>
 </div>
-
-<form method="post">
-    <!-- Hidden field for the Book ID -->
-    <input type="hidden" asp-for="Book.Id" />
-    <button type="submit">Delete</button>    
-</form>
