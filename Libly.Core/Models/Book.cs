@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace Libly.Core.Models
 {
@@ -13,6 +14,9 @@ namespace Libly.Core.Models
         // Navigation property to Category
         public int CategoryId { get; set; }
         public Category Category { get; set; }
+
+        // New property for formatted title
+        public string FormattedTitle => GetFormattedTitle();
 
         // Parameterless constructor
         public Book() : base()
@@ -28,8 +32,8 @@ namespace Libly.Core.Models
             CategoryId = categoryId;
         }
 
-        // New method for formatting the title
-        public string GetFormattedTitle()
+        // Method for formatting the title
+        private string GetFormattedTitle()
         {
             if (string.IsNullOrWhiteSpace(Title))
                 return string.Empty;
