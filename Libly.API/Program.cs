@@ -1,7 +1,14 @@
+using Microsoft.EntityFrameworkCore;
+using Libly.Core.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+
+// Add DbContext to the DI container
+builder.Services.AddDbContext<BooksContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("LibraryDB")));
 
 var app = builder.Build();
 
@@ -11,10 +18,3 @@ app.UseHttpsRedirection();
 app.MapControllers();
 
 app.Run();
-
-class Book
-{
-    public int Id { get; set; }
-    public string Title { get; set; }
-    public DateTime Dop { get; set; }
-}
