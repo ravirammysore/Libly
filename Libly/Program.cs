@@ -1,13 +1,13 @@
 using Libly.Core.Data;
 using Microsoft.EntityFrameworkCore;
+using Libly.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 //adds Razor Pages services to the DI container.
 builder.Services.AddRazorPages();
 
-// Register the BooksContext with DI
-builder.Services.AddDbContext<BooksContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("LibraryDB")));
+// Register the API Client
+builder.Services.AddHttpClient<ApiClient>();
 
 //Before this, request all services required by the app
 var app = builder.Build();
@@ -34,3 +34,5 @@ app.UseEndpoints(endpoints => endpoints.MapRazorPages());
 
 //Before this, select which of the services to be used in the app
 app.Run();
+
+

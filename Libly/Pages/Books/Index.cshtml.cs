@@ -1,24 +1,23 @@
-using Libly.Core.Data;
-using Libly.Core.Models;
-using Microsoft.AspNetCore.Mvc;
+using Libly.Core.Dtos;
+using Libly.Services;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 
 namespace Libly.Pages.Books
 {
     public class IndexModel : PageModel
     {        
-        private readonly BooksContext _context;
+        private readonly ApiClient _apiClient;
 
-        public IndexModel(BooksContext context)
+        public IndexModel(ApiClient apiClient)
         {
-            _context = context;
+            _apiClient = apiClient;
         }
 
-        public List<Book> Books { get; set; }
+        public List<BookDto> Books { get; set; }
+
         public void OnGet()
         {
-            Books = _context.Books.Include(i => i.Category).ToList();
+            Books = _apiClient.GetBooks();
         }
     }
 }

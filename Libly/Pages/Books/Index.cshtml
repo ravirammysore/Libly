@@ -17,8 +17,8 @@
         {
             <tr>                
                 <td>@book.Title</td>
-                <td>@book.Category.Name</td>
-                <td> @Html.DisplayFor(modelItem => book.Dop)</td>
+                <td>@book.CategoryName</td>
+                <td>@book.Dop.ToShortDateString()</td>
                 <td>
                     <a asp-page="Edit" asp-route-id="@book.Id">Edit</a>
                     <a asp-page="Delete" asp-route-id="@book.Id">Delete</a>

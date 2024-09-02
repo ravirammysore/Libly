@@ -1,28 +1,25 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using Libly.Core.Data;
-using Libly.Core.Models;
-
+using Libly.Core.Dtos;
+using Libly.Services;
 
 namespace Libly.Pages.Books
 {
     public class DeleteModel : PageModel
     {
-        private readonly BooksContext _context;
-        public DeleteModel(BooksContext context)
+        private readonly ApiClient _apiClient;
+
+        public DeleteModel(ApiClient apiClient)
         {
-            _context = context; 
+            _apiClient = apiClient;
         }
+
         [BindProperty]
-        public Book? Book { get; set; }
+        public BookDto Book { get; set; }
 
         public IActionResult OnGet(int id)
         {
-            // Retrieve the book to be deleted
-            Book = _context.Books
-                            .Include(b => b.Category)
-                            .SingleOrDefault(b => b.Id == id);
+            Book = _apiClient.GetBook(id);
 
             if (Book == null)
             {
@@ -32,13 +29,9 @@ namespace Libly.Pages.Books
             return Page();
         }
 
-        public IActionResult OnPost()
+        public IActionResult OnPost(int id)
         {
-            // Delete the book from the static collection
-            _context.Books.Remove(Book);
-            _context.SaveChanges();
-
-            // Redirect back to the Index page after deletion
+            _apiClient.DeleteBook(id);
             return RedirectToPage("./Index");
         }
     }

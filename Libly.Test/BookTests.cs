@@ -17,7 +17,7 @@ namespace Libly.Test
             var book = new Book { Title = input };
 
             // Act
-            var result = book.GetFormattedTitle();
+            var result = book.FormattedTitle;
 
             // Assert
             Assert.Equal(expected, result);

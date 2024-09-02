@@ -1,4 +1,4 @@
-﻿namespace Libly.Core.DTOs
+﻿namespace Libly.Core.Dtos
 {
     public class BookDto
     {
