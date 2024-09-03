@@ -129,4 +129,18 @@ public class BooksController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpGet("categories")]
+    public ActionResult<IEnumerable<CategoryDto>> GetCategories()
+    {
+        var categories = _context.Categories
+            .Select(c => new CategoryDto
+            {
+                Id = c.Id,
+                Name = c.Name
+            })
+            .ToList();
+
+        return categories;
+    }
 }

@@ -3,30 +3,35 @@
 
 <h1>Book List</h1>
 
-<table class="table table-striped">
-    <thead>
-        <tr>            
-            <th>Title</th>
-            <th>Category</th>
-            <th>Date of Publication</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var book in Model.Books)
-        {
-            <tr>                
-                <td>@book.Title</td>
-                <td>@book.CategoryName</td>
-                <td>@book.Dop.ToShortDateString()</td>
-                <td>
-                    <a asp-page="Edit" asp-route-id="@book.Id">Edit</a>
-                    <a asp-page="Delete" asp-route-id="@book.Id">Delete</a>
-                </td>
+<div asp-validation-summary="All" class="text-danger"></div>
+
+@if (Model.Books.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Date of Publication</th>
+                <th>Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
-<div>    
-    <a asp-page="Create">Add New</a>
-</div>
+        </thead>
+        <tbody>
+            @foreach (var book in Model.Books)
+            {
+                <tr>
+                    <td>@book.Title</td>
+                    <td>@book.CategoryName</td>
+                    <td>@book.Dop.ToShortDateString()</td>
+                    <td>
+                        <a asp-page="Edit" asp-route-id="@book.Id">Edit</a>
+                        <a asp-page="Delete" asp-route-id="@book.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div>
+        <a asp-page="Create">Add New</a>
+    </div>
+}

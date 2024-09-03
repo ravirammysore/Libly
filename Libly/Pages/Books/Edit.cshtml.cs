@@ -19,26 +19,34 @@ namespace Libly.Pages.Books
         public BookUpdateDto Book { get; set; }
 
         public List<SelectListItem> CategoryOptions { get; set; }
-
+      
         public IActionResult OnGet(int id)
         {
-            var book = _apiClient.GetBook(id);
-
-            if (book == null)
+            try
             {
-                return NotFound();
+                var book = _apiClient.GetBook(id);
+
+                if (book == null)
+                {
+                    return NotFound();
+                }
+
+                Book = new BookUpdateDto
+                {
+                    Id = book.Id,
+                    Title = book.Title,
+                    Dop = book.Dop,
+                    CategoryId = book.CategoryId
+                };
+
+                PopulateDropdown();
+                return Page();
             }
-
-            Book = new BookUpdateDto
+            catch (Exception)
             {
-                Id = book.Id,
-                Title = book.Title,
-                Dop = book.Dop,
-                CategoryId = book.CategoryId
-            };
-
-            PopulateDropdown();
-            return Page();
+                ModelState.AddModelError(string.Empty, "Error loading the book. Please try again later.");
+                return Page();
+            }
         }
 
         public IActionResult OnPost()
@@ -49,19 +57,35 @@ namespace Libly.Pages.Books
                 return Page();
             }
 
-            _apiClient.UpdateBook(Book.Id, Book);
-            return RedirectToPage("./Index");
+            try
+            {
+                _apiClient.UpdateBook(Book.Id, Book);
+                return RedirectToPage("./Index");
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "Error updating the book. Please try again later.");
+                PopulateDropdown();
+                return Page();
+            }
         }
 
         private void PopulateDropdown()
         {
-            // Fetch categories from the API or database
-            // This is a placeholder. Replace with actual category fetching logic.
-            CategoryOptions = new List<SelectListItem>
+            try
             {
-                new SelectListItem { Value = "1", Text = "Fiction" },
-                new SelectListItem { Value = "2", Text = "Science Fiction" }
-            };
+                var categories = _apiClient.GetCategories();
+                CategoryOptions = categories.Select(c => new SelectListItem
+                {
+                    Value = c.Id.ToString(),
+                    Text = c.Name
+                }).ToList();
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "Error loading categories. Please try again later.");
+            }
         }
+
     }
 }

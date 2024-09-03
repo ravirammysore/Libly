@@ -19,20 +19,36 @@ namespace Libly.Pages.Books
 
         public IActionResult OnGet(int id)
         {
-            Book = _apiClient.GetBook(id);
-
-            if (Book == null)
+            try
             {
-                return NotFound();
-            }
+                Book = _apiClient.GetBook(id);
 
-            return Page();
+                if (Book == null)
+                {
+                    return NotFound();
+                }
+
+                return Page();
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "Error loading the book. Please try again later.");
+                return Page();
+            }
         }
 
         public IActionResult OnPost(int id)
         {
-            _apiClient.DeleteBook(id);
-            return RedirectToPage("./Index");
+            try
+            {
+                _apiClient.DeleteBook(id);
+                return RedirectToPage("./Index");
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "Error deleting the book. Please try again later.");
+                return Page();
+            }
         }
     }
 }

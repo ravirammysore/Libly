@@ -13,11 +13,18 @@ namespace Libly.Pages.Books
             _apiClient = apiClient;
         }
 
-        public List<BookDto> Books { get; set; }
+        public List<BookDto> Books { get; set; } = new List<BookDto>();
 
         public void OnGet()
         {
-            Books = _apiClient.GetBooks();
+            try
+            {
+                Books = _apiClient.GetBooks();
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "Error loading books. Please try again later.");
+            }
         }
     }
 }

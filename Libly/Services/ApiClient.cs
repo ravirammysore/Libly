@@ -9,8 +9,7 @@ namespace Libly.Services
 
         public ApiClient(HttpClient httpClient)
         {
-            _httpClient = httpClient;
-            _httpClient.BaseAddress = new Uri("https://localhost:7012/"); // Adjust this URL to match your API's address
+            _httpClient = httpClient;            
         }
 
         public List<BookDto> GetBooks()
@@ -44,6 +43,13 @@ namespace Libly.Services
         {
             var response = _httpClient.DeleteAsync($"api/books/{id}").Result;
             response.EnsureSuccessStatusCode();
+        }
+
+        public List<CategoryDto> GetCategories()
+{
+            var response = _httpClient.GetAsync("api/books/categories").Result;
+            response.EnsureSuccessStatusCode();
+            return response.Content.ReadFromJsonAsync<List<CategoryDto>>().Result;
         }
     }
 }

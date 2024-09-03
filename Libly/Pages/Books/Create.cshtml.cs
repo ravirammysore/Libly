@@ -33,19 +33,34 @@ namespace Libly.Pages.Books
                 return Page();
             }
 
-            _apiClient.CreateBook(Book);
-            return RedirectToPage("./Index");
+            try
+            {
+                _apiClient.CreateBook(Book);
+                return RedirectToPage("./Index");
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "Error creating the book. Please try again later.");
+                PopulateDropdown();
+                return Page();
+            }
         }
 
         private void PopulateDropdown()
         {
-            // Fetch categories from the API or database
-            // This is a placeholder. Replace with actual category fetching logic.
-            CategoryOptions = new List<SelectListItem>
+            try
             {
-                new SelectListItem { Value = "1", Text = "Fiction" },
-                new SelectListItem { Value = "2", Text = "Science Fiction" }
-            };
+                var categories = _apiClient.GetCategories();
+                CategoryOptions = categories.Select(c => new SelectListItem
+                {
+                    Value = c.Id.ToString(),
+                    Text = c.Name
+                }).ToList();
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "Error loading categories. Please try again later.");
+            }
         }
     }
 }

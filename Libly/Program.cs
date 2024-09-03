@@ -7,7 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 
 // Register the API Client
-builder.Services.AddHttpClient<ApiClient>();
+builder.Services.AddHttpClient<ApiClient>(client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]??"");
+});
 
 //Before this, request all services required by the app
 var app = builder.Build();
