@@ -1,65 +1,52 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Libly.Core.Dtos;
 using Libly.Services;
 
 namespace Libly.Pages.Books
 {
-    public class CreateModel : PageModel
+    public class CreateModel(ApiClient apiClient) : BasePageModel
     {
-        private readonly ApiClient _apiClient;
-
-        public CreateModel(ApiClient apiClient)
-        {
-            _apiClient = apiClient;
-        }
-
         [BindProperty]
-        public BookCreateDto Book { get; set; }
+        public required BookCreateDto Book { get; init; }
 
-        public List<SelectListItem> CategoryOptions { get; set; }
+        public List<SelectListItem> CategoryOptions { get; set; } = [];
 
-        public void OnGet()
-        {
-            PopulateDropdown();
-        }
+        public async Task OnGetAsync() => await PopulateDropdownAsync();
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
-                PopulateDropdown();
+                await PopulateDropdownAsync();
                 return Page();
             }
 
             try
             {
-                _apiClient.CreateBook(Book);
+                await apiClient.CreateBookAsync(Book);
                 return RedirectToPage("./Index");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, "Error creating the book. Please try again later.");
-                PopulateDropdown();
+                DisplayError($"Error creating the book: {ex.Message}");
+                await PopulateDropdownAsync();
                 return Page();
             }
         }
 
-        private void PopulateDropdown()
+        private async Task PopulateDropdownAsync()
         {
             try
             {
-                var categories = _apiClient.GetCategories();
-                CategoryOptions = categories.Select(c => new SelectListItem
-                {
-                    Value = c.Id.ToString(),
-                    Text = c.Name
-                }).ToList();
+                var categories = await apiClient.GetCategoriesAsync();
+                CategoryOptions = categories
+                    .Select(c => new SelectListItem(c.Name, c.Id.ToString()))
+                    .ToList();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, "Error loading categories. Please try again later.");
+                DisplayError($"Error loading categories: {ex.Message}");
             }
         }
     }

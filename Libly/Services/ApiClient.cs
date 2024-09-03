@@ -9,47 +9,48 @@ namespace Libly.Services
 
         public ApiClient(HttpClient httpClient)
         {
-            _httpClient = httpClient;            
+            _httpClient = httpClient;
         }
 
-        public List<BookDto> GetBooks()
+        public async Task<List<BookDto>> GetBooksAsync()
         {
-            var response = _httpClient.GetAsync("api/books").Result;
+            var response = await _httpClient.GetAsync("api/books");
             response.EnsureSuccessStatusCode();
-            return response.Content.ReadFromJsonAsync<List<BookDto>>().Result;
+            return await response.Content.ReadFromJsonAsync<List<BookDto>>() ?? [];
         }
 
-        public BookDto GetBook(int id)
+        public async Task<BookDto?> GetBookAsync(int id)
         {
-            var response = _httpClient.GetAsync($"api/books/{id}").Result;
+            var response = await _httpClient.GetAsync($"api/books/{id}");
             response.EnsureSuccessStatusCode();
-            return response.Content.ReadFromJsonAsync<BookDto>().Result;
+            return await response.Content.ReadFromJsonAsync<BookDto>();
         }
 
-        public BookDto CreateBook(BookCreateDto book)
+        public async Task<BookDto> CreateBookAsync(BookCreateDto book)
         {
-            var response = _httpClient.PostAsJsonAsync("api/books", book).Result;
+            var response = await _httpClient.PostAsJsonAsync("api/books", book);
             response.EnsureSuccessStatusCode();
-            return response.Content.ReadFromJsonAsync<BookDto>().Result;
+            return await response.Content.ReadFromJsonAsync<BookDto>() ?? 
+                throw new InvalidOperationException("Failed to create book");
         }
 
-        public void UpdateBook(int id, BookUpdateDto book)
+        public async Task UpdateBookAsync(int id, BookUpdateDto book)
         {
-            var response = _httpClient.PutAsJsonAsync($"api/books/{id}", book).Result;
+            var response = await _httpClient.PutAsJsonAsync($"api/books/{id}", book);
             response.EnsureSuccessStatusCode();
         }
 
-        public void DeleteBook(int id)
+        public async Task DeleteBookAsync(int id)
         {
-            var response = _httpClient.DeleteAsync($"api/books/{id}").Result;
+            var response = await _httpClient.DeleteAsync($"api/books/{id}");
             response.EnsureSuccessStatusCode();
         }
 
-        public List<CategoryDto> GetCategories()
-{
-            var response = _httpClient.GetAsync("api/books/categories").Result;
+        public async Task<List<CategoryDto>> GetCategoriesAsync()
+        {
+            var response = await _httpClient.GetAsync("api/books/categories");
             response.EnsureSuccessStatusCode();
-            return response.Content.ReadFromJsonAsync<List<CategoryDto>>().Result;
+            return await response.Content.ReadFromJsonAsync<List<CategoryDto>>() ?? [];
         }
     }
 }

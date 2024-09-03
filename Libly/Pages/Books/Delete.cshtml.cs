@@ -1,52 +1,39 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Libly.Core.Dtos;
 using Libly.Services;
 
 namespace Libly.Pages.Books
 {
-    public class DeleteModel : PageModel
+    public class DeleteModel(ApiClient apiClient) : BasePageModel
     {
-        private readonly ApiClient _apiClient;
-
-        public DeleteModel(ApiClient apiClient)
-        {
-            _apiClient = apiClient;
-        }
-
         [BindProperty]
-        public BookDto Book { get; set; }
+        public BookDto? Book { get; set; }
 
-        public IActionResult OnGet(int id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
             try
             {
-                Book = _apiClient.GetBook(id);
+                Book = await apiClient.GetBookAsync(id);
 
-                if (Book == null)
-                {
-                    return NotFound();
-                }
-
-                return Page();
+                return Book == null ? NotFound() : Page();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, "Error loading the book. Please try again later.");
+                DisplayError($"Error loading the book: {ex.Message}");
                 return Page();
             }
         }
 
-        public IActionResult OnPost(int id)
+        public async Task<IActionResult> OnPostAsync(int id)
         {
             try
             {
-                _apiClient.DeleteBook(id);
+                await apiClient.DeleteBookAsync(id);
                 return RedirectToPage("./Index");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, "Error deleting the book. Please try again later.");
+                DisplayError($"Error deleting the book: {ex.Message}");
                 return Page();
             }
         }

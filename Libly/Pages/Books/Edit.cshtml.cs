@@ -1,30 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Libly.Core.Dtos;
 using Libly.Services;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Libly.Pages.Books
 {
-    public class EditModel : PageModel
+    public class EditModel(ApiClient apiClient) : BasePageModel
     {
-        private readonly ApiClient _apiClient;
-
-        public EditModel(ApiClient apiClient)
-        {
-            _apiClient = apiClient;
-        }
-
         [BindProperty]
-        public BookUpdateDto Book { get; set; }
+        public required BookUpdateDto Book { get; set; }
 
-        public List<SelectListItem> CategoryOptions { get; set; }
-      
-        public IActionResult OnGet(int id)
+        public List<SelectListItem> CategoryOptions { get; set; } = [];
+
+        public async Task<IActionResult> OnGetAsync(int id)
         {
             try
             {
-                var book = _apiClient.GetBook(id);
+                var book = await apiClient.GetBookAsync(id);
 
                 if (book == null)
                 {
@@ -39,53 +31,52 @@ namespace Libly.Pages.Books
                     CategoryId = book.CategoryId
                 };
 
-                PopulateDropdown();
+                await PopulateDropdownAsync();
                 return Page();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, "Error loading the book. Please try again later.");
+                DisplayError($"Error loading the book: {ex.Message}");
                 return Page();
             }
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
-                PopulateDropdown();
+                await PopulateDropdownAsync();
                 return Page();
             }
 
             try
             {
-                _apiClient.UpdateBook(Book.Id, Book);
+                await apiClient.UpdateBookAsync(Book.Id, Book);
                 return RedirectToPage("./Index");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, "Error updating the book. Please try again later.");
-                PopulateDropdown();
+                DisplayError($"Error updating the book: {ex.Message}");
+                await PopulateDropdownAsync();
                 return Page();
             }
         }
 
-        private void PopulateDropdown()
+        private async Task PopulateDropdownAsync()
         {
             try
             {
-                var categories = _apiClient.GetCategories();
+                var categories = await apiClient.GetCategoriesAsync();
                 CategoryOptions = categories.Select(c => new SelectListItem
                 {
                     Value = c.Id.ToString(),
                     Text = c.Name
                 }).ToList();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, "Error loading categories. Please try again later.");
+                DisplayError($"Error loading categories: {ex.Message}");
             }
         }
-
     }
 }

@@ -16,9 +16,9 @@ public class BooksController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<BookDto>> GetBooks()
+    public async Task<ActionResult<IEnumerable<BookDto>>> GetBooksAsync()
     {
-        var books = _context.Books
+        var books = await _context.Books
             .Include(b => b.Category)
             .Select(b => new BookDto
             {
@@ -29,17 +29,17 @@ public class BooksController : ControllerBase
                 CategoryId = b.CategoryId,
                 CategoryName = b.Category.Name
             })
-            .ToList();
+            .ToListAsync();
 
         return books;
     }
 
     [HttpGet("{id}")]
-    public ActionResult<BookDto> GetBook(int id)
+    public async Task<ActionResult<BookDto>> GetBookAsync(int id)
     {
-        var book = _context.Books
+        var book = await _context.Books
             .Include(b => b.Category)
-            .FirstOrDefault(b => b.Id == id);
+            .FirstOrDefaultAsync(b => b.Id == id);
 
         if (book == null)
         {
@@ -60,7 +60,7 @@ public class BooksController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult<BookDto> CreateBook(BookCreateDto bookDto)
+    public async Task<ActionResult<BookDto>> CreateBookAsync(BookCreateDto bookDto)
     {
         var book = new Book
         {
@@ -70,11 +70,11 @@ public class BooksController : ControllerBase
         };
 
         _context.Books.Add(book);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
-        var createdBook = _context.Books
+        var createdBook = await _context.Books
             .Include(b => b.Category)
-            .First(b => b.Id == book.Id);
+            .FirstAsync(b => b.Id == book.Id);
 
         var createdBookDto = new BookDto
         {
@@ -86,18 +86,18 @@ public class BooksController : ControllerBase
             CategoryName = createdBook.Category.Name
         };
 
-        return CreatedAtAction(nameof(GetBook), new { id = createdBook.Id }, createdBookDto);
+        return Ok(createdBookDto);
     }
 
     [HttpPut("{id}")]
-    public IActionResult UpdateBook(int id, BookUpdateDto bookDto)
+    public async Task<IActionResult> UpdateBookAsync(int id, BookUpdateDto bookDto)
     {
         if (id != bookDto.Id)
         {
             return BadRequest();
         }
 
-        var book = _context.Books.Find(id);
+        var book = await _context.Books.FindAsync(id);
         if (book == null)
         {
             return NotFound();
@@ -106,40 +106,39 @@ public class BooksController : ControllerBase
         book.Title = bookDto.Title;
         book.Dop = bookDto.Dop;
         book.CategoryId = bookDto.CategoryId;
-        //lets stamp this to know when it was modified
         book.ModifiedOn = DateTime.Now;
 
         _context.Entry(book).State = EntityState.Modified;
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         return NoContent();
     }
 
     [HttpDelete("{id}")]
-    public IActionResult DeleteBook(int id)
+    public async Task<IActionResult> DeleteBookAsync(int id)
     {
-        var book = _context.Books.Find(id);
+        var book = await _context.Books.FindAsync(id);
         if (book == null)
         {
             return NotFound();
         }
 
         _context.Books.Remove(book);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         return NoContent();
     }
 
     [HttpGet("categories")]
-    public ActionResult<IEnumerable<CategoryDto>> GetCategories()
+    public async Task<ActionResult<IEnumerable<CategoryDto>>> GetCategoriesAsync()
     {
-        var categories = _context.Categories
+        var categories = await _context.Categories
             .Select(c => new CategoryDto
             {
                 Id = c.Id,
                 Name = c.Name
             })
-            .ToList();
+            .ToListAsync();
 
         return categories;
     }

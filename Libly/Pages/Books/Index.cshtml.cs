@@ -4,26 +4,19 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Libly.Pages.Books
 {
-    public class IndexModel : PageModel
-    {        
-        private readonly ApiClient _apiClient;
+    public class IndexModel(ApiClient apiClient) : BasePageModel
+    {
+        public List<BookDto> Books { get; set; } = [];
 
-        public IndexModel(ApiClient apiClient)
-        {
-            _apiClient = apiClient;
-        }
-
-        public List<BookDto> Books { get; set; } = new List<BookDto>();
-
-        public void OnGet()
+        public async Task OnGetAsync()
         {
             try
             {
-                Books = _apiClient.GetBooks();
+                Books = await apiClient.GetBooksAsync();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, "Error loading books. Please try again later.");
+                DisplayError($"Error loading books: {ex.Message}");
             }
         }
     }
