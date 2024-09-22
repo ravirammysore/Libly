@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Libly.Core.APIClients;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Libly.Core.Models
@@ -56,6 +57,24 @@ namespace Libly.Core.Models
                 return word;
 
             return char.ToUpper(word[0]) + word.Substring(1).ToLower();
+        }
+
+        public double CalculateRent(IGoodreadsApiClient goodreadsApiClient)
+        {
+            double rating = goodreadsApiClient.GetBookRating(Title);
+            
+            // Base rent
+            double baseRent = 2.0; 
+
+            // Calculate rent based on DOP and rating:
+            
+            // Newer books cost more
+            double ageFactor = (DateTime.Now - Dop).TotalDays < 180 ? 1.5 : 1.0;
+            
+            // Normalize rating to a factor between 0 and 1
+            double ratingFactor = rating / 5.0; 
+
+            return baseRent * ageFactor * (1 + ratingFactor);
         }
     }
 }
